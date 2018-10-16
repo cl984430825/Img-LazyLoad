@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Img lazyLoad</title>
+</head>
+<style>
+    *{padding: 0;margin: 0;}
+    .imgArr{width:600px;height: 400px;}
+    div{text-align:center;}
+</style>
+<body>
+    <div id="container"></div>
+</body>
+<script>
+    // 配置参数
+    let optionObj = {
+        // 图片数量
+        EleNumber: 50,
+        // 图片加载延迟
+        imgLoadlazyTime: 100,
+        // 展示图片
+        imgSrc: "https://user-gold-cdn.xitu.io/2018/10/15/16676a9b038ebc70?imageView2/1/w/1304/h/734/q/85/format/webp/interlace/1",
+        // 加载过渡图片
+        loadImg: "./timg.gif"
+    }
+    // 创建图片
+    for(let i = 0;i < optionObj.EleNumber;i++){
+        let img = document.createElement("img");
+        img.className = "imgArr";
+        img.setAttribute("src",optionObj.loadImg);
+        document.getElementById("container").append(img);
+    }
+    let imgArr = document.getElementsByClassName("imgArr");
+    // 监听鼠标滑动=>设置图片懒加载
+    for(let i = 0;i < imgArr.length;i++){
+        let io = new IntersectionObserver(
+            entries => {
+                if(entries[0].isIntersecting){
+                    setTimeout(()=>{
+                        document.getElementsByClassName('imgArr')[i].src = optionObj.imgSrc;
+                    },optionObj.imgLoadlazyTime)
+                }else{
+                    document.getElementsByClassName('imgArr')[i].src = optionObj.loadImg;
+                }
+            }
+        )
+        io.observe(imgArr[i])
+    }
+</script>
+</html>
