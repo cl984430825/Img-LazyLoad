@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>LazyLoad</title>
+</head>
+<style>
+    *{margin: 0;padding: 0;}
+    #container{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    .imgCls{
+        width: 300px;
+        height: 150px;
+    }
+</style>
+<body>
+    <div id="container"></div>
+</body>
+<script>
+    // 配置参数
+    let configObj = {
+        // 图片数里
+        imgNum: 50,
+        // 图片请求地址
+        imgUrl: "https://user-gold-cdn.xitu.io/2018/10/15/16676a9b038ebc70?imageView2/1/w/1304/h/734/q/85/format/webp/interlace/1",
+        // 加载过渡图片
+        loadImg: './timg.gif',
+        // 图片加载延迟
+        imgTimeOut: 100
+    }
+    // 创建图片
+    new Array(configObj.imgNum).fill(1).map((v,i)=>{
+        let img = document.createElement('img');
+        img.className = "imgCls";
+        img.src = configObj.loadImg;
+        document.getElementById('container').append(img);
+    })
+    
+    // 使用intersectionObserver方法来监测窗口显示视图的状态
+    let imgArr = document.getElementsByClassName('imgCls');
+    new Array(imgArr.length).fill(1).map((v,i)=>{
+        let io = new IntersectionObserver(
+            entries => {
+                if(entries[0].isIntersecting){
+                    setTimeout(()=>{
+                        imgArr[10].src = configObj.imgUrl;
+                    },configObj.imgTimeOut)
+                }
+            }
+        )
+        io.observe(imgArr[10]);
+    })
+</script>
+</html>
